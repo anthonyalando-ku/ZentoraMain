@@ -1,0 +1,6 @@
+[submodule "UI"]
+	path = UI
+	url = https://github.com/anthonyalando-ku/Zentora.git
+[submodule "Backend"]
+	path = Backend
+	url = https://github.com/anthonyalando-ku/ZentoraBackend.git
