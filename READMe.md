@@ -29,7 +29,7 @@ Hard constraints:
 
 ## 1. Backend endpoint extraction
 
-Source of truth: `/home/runner/work/ZentoraMain/ZentoraMain/Backend/internal/app/router.go`
+Source of truth: `Backend/internal/app/router.go`
 
 ### Catalog
 
@@ -47,7 +47,7 @@ Public routes:
 - `GET /api/v1/catalog/attributes/:id`
 - `GET /api/v1/catalog/attributes/:id/values`
 - `GET /api/v1/catalog/products`
-  - query support from `/Backend/internal/handlers/catalog/product.go`:
+  - query support from `Backend/internal/handlers/catalog/product.go`:
     - `page`
     - `page_size`
     - `status`
@@ -83,7 +83,7 @@ Public routes with optional auth:
 - `POST /api/v1/discovery/search/events`
 - `POST /api/v1/discovery/search/clicks`
 
-Supported feed types from `/Backend/internal/domain/discovery/types.go`:
+Supported feed types from `Backend/internal/domain/discovery/types.go`:
 - `trending`
 - `best_sellers`
 - `recommended`
@@ -97,7 +97,7 @@ Supported feed types from `/Backend/internal/domain/discovery/types.go`:
 - `search`
 - `category`
 
-Feed query parameters from `/Backend/internal/handlers/discovery/handler.go`:
+Feed query parameters from `Backend/internal/handlers/discovery/handler.go`:
 - `feed_type`
 - `limit`
 - `session_id`
@@ -158,7 +158,7 @@ Authenticated:
 - `GET /api/v1/orders`
 - `GET /api/v1/orders/details`
 
-Order payload notes from `/Backend/internal/domain/order/dto.go`:
+Order payload notes from `Backend/internal/domain/order/dto.go`:
 - guest order body:
   - `items[]` with `product_id`, `variant_id`, `quantity`
   - `shipping`
@@ -172,7 +172,7 @@ Order payload notes from `/Backend/internal/domain/order/dto.go`:
 - currently supported payment method constant:
   - `pay_on_delivery`
 
-Order listing query support from `/Backend/internal/handlers/order/handler.go`:
+Order listing query support from `Backend/internal/handlers/order/handler.go`:
 - `order_id`
 - `order_number`
 - `user_id`
@@ -195,7 +195,7 @@ Authenticated routes:
 - `DELETE /api/v1/me/addresses/:id`
 - `PUT /api/v1/me/addresses/:id/default`
 
-Address payload fields from `/Backend/internal/domain/user/dto.go`:
+Address payload fields from `Backend/internal/domain/user/dto.go`:
 - `full_name`
 - `phone_number`
 - `country`
@@ -219,7 +219,7 @@ Review creation fields:
 - `comment`
 
 Important dependency note:
-- `/Backend/internal/handlers/review/handler.go` contains a public `ListProductReviews` handler, but `/Backend/internal/app/router.go` does not currently expose a matching GET route. Product-detail review display therefore depends on a backend router addition in a later implementation phase.
+- `Backend/internal/handlers/review/handler.go` contains a public `ListProductReviews` handler, but `Backend/internal/app/router.go` does not currently expose a matching GET route. Product-detail review display therefore depends on a backend router addition in a later implementation phase.
 
 ### Search
 
@@ -244,50 +244,50 @@ Tracking payloads:
 ## 2. Frontend structure analysis
 
 Primary source files:
-- router: `/home/runner/work/ZentoraMain/ZentoraMain/UI/src/app/router/publicRoutes.tsx`
-- layout shell: `/home/runner/work/ZentoraMain/ZentoraMain/UI/src/shared/layouts/MainLayout.tsx`
-- API client: `/home/runner/work/ZentoraMain/ZentoraMain/UI/src/core/api/http.ts`
-- response unwrapping and auth injection: `/home/runner/work/ZentoraMain/ZentoraMain/UI/src/core/api/interceptors.ts`
+- router: `UI/src/app/router/publicRoutes.tsx`
+- layout shell: `UI/src/shared/layouts/MainLayout.tsx`
+- API client: `UI/src/core/api/http.ts`
+- response unwrapping and auth injection: `UI/src/core/api/interceptors.ts`
 
 ### Current pages
 
 - Homepage
-  - `/UI/src/features/public/home/pages/HomePage.tsx`
+  - `UI/src/features/public/home/pages/HomePage.tsx`
 - Products page
-  - `/UI/src/features/products/pages/ProductsPage.tsx`
+  - `UI/src/features/products/pages/ProductsPage.tsx`
 - Product detail page
-  - `/UI/src/features/products/pages/ProductDetailPage.tsx`
+  - `UI/src/features/products/pages/ProductDetailPage.tsx`
 - Cart page
-  - `/UI/src/features/cart/pages/CartPage.tsx`
+  - `UI/src/features/cart/pages/CartPage.tsx`
 - Checkout page
-  - `/UI/src/features/checkout/pages/CheckoutPage.tsx`
+  - `UI/src/features/checkout/pages/CheckoutPage.tsx`
 - Account page
-  - `/UI/src/features/account/pages/AccountDashboardPage.tsx`
+  - `UI/src/features/account/pages/AccountDashboardPage.tsx`
 
 ### Shared components and layout pieces that affect integration
 
 - product card:
-  - `/UI/src/features/products/components/ProductCard.tsx`
+  - `UI/src/features/products/components/ProductCard.tsx`
 - desktop search:
-  - `/UI/src/shared/layouts/components/HeaderSearch.tsx`
+  - `UI/src/shared/layouts/components/HeaderSearch.tsx`
 - mobile search:
-  - `/UI/src/shared/layouts/components/MobileMenu.tsx`
+  - `UI/src/shared/layouts/components/MobileMenu.tsx`
 - header shell:
-  - `/UI/src/shared/layouts/components/Header.tsx`
+  - `UI/src/shared/layouts/components/Header.tsx`
 
 ### Existing data/state infrastructure
 
 - axios client already exists and unwraps `{ success, message, data }` responses
 - auth persistence already exists in Zustand:
-  - `/UI/src/features/auth/store/authStore.ts`
+  - `UI/src/features/auth/store/authStore.ts`
 - cart persistence currently exists only as a local Zustand store:
-  - `/UI/src/features/cart/store/cartStore.ts`
+  - `UI/src/features/cart/store/cartStore.ts`
 - TanStack React Query is available but not yet used for catalog/discovery/cart data
 
 ### Mock-data usage that must be replaced
 
 Source:
-- `/UI/src/shared/constants/mockProducts.ts`
+- `UI/src/shared/constants/mockProducts.ts`
 
 Current mock consumers:
 - homepage uses `mockProducts` and `mockCategories`
@@ -306,6 +306,11 @@ Current mock consumers:
 - account routing currently exposes only `/account`; deeper account sections in the UI are placeholders
 
 ## 3. Page-to-API mapping
+
+Each page section below is organized the same way:
+- `Components/pages to wire` identifies the current frontend files that will carry the integration work
+- `APIs` identifies the backend endpoints that should drive that surface
+- `UI mapping` explains the user-visible behavior and constraints that the implementation must preserve
 
 ### Homepage
 
@@ -489,9 +494,9 @@ UI mapping:
 ### Step 1 — API client layer
 
 Components/files to modify:
-- `/UI/src/core/api/http.ts`
-- `/UI/src/core/api/interceptors.ts`
-- new user-side API modules under feature folders or `/UI/src/core/api`
+- `UI/src/core/api/http.ts`
+- `UI/src/core/api/interceptors.ts`
+- new user-side API modules under feature folders or `UI/src/core/api`
 
 APIs to integrate:
 - catalog
@@ -715,7 +720,7 @@ State requirements:
 
 ## 6. Known blockers / contract mismatches
 
-- Product detail requires frontend access to variants alongside slug detail; if slug detail response does not include rich variant data, the frontend must chain a variant list request using backend-only product ID from the detail response.
-- Homepage and products cards need wishlist state, but wishlist writes require both `product_id` and `variant_id`; list-card wishlist behavior therefore needs a deterministic default variant strategy or a backend enhancement for product-level wishlist toggling.
+- Product detail requires frontend access to variants alongside slug detail. The current backend router exposes both `GET /catalog/products/slug/:slug` and `GET /catalog/products/:id/variants`, and the safest implementation plan should assume the frontend will chain the variant list request after slug lookup unless the real slug-detail payload is confirmed to already contain the exact variant data needed by the UI.
+- Homepage and products cards need wishlist state, but wishlist writes require both `product_id` and `variant_id`; the recommended implementation path is to resolve a deterministic default variant from product detail or variant-list data before enabling wishlist writes, while treating a product-level wishlist endpoint as a future backend enhancement rather than a frontend dependency.
 - The backend contains review list logic but does not currently register a public GET reviews route in the router, so rendering review lists on product detail is blocked until that route is exposed.
 - Logged-in cart deletion is item-ID based, while the current frontend cart store keys by product ID; the frontend cart model must change before API integration.
