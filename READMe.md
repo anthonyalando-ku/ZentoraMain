@@ -47,14 +47,41 @@ Public routes:
 - `GET /api/v1/catalog/attributes/:id`
 - `GET /api/v1/catalog/attributes/:id/values`
 - `GET /api/v1/catalog/products`
-  - query support from `Backend/internal/handlers/catalog/product.go`:
-    - `page`
-    - `page_size`
-    - `status`
-    - `brand_id`
-    - `category_id`
-    - `is_featured`
-    - `q`
+
+Query parameters from Backend/internal/handlers/catalog/product.go:
+
+Pagination
+- page
+- page_size
+
+Sorting
+- sort
+- feed_type (maps to internal sort strategies)
+
+Basic filters
+- status
+- brand_id
+- brand_ids (comma separated)
+- category_id
+- is_featured
+- q (search query)
+
+Price filters
+- price_min
+- price_max
+
+Rating filters
+- min_rating
+
+Promotion filters
+- discount_only
+
+Inventory filters
+- in_stock_only
+
+Tag filters
+- tag_ids (comma separated)
+
 - `GET /api/v1/catalog/products/slug/:slug`
 - `GET /api/v1/catalog/products/:id`
 - `GET /api/v1/catalog/products/:id/images`
@@ -724,3 +751,12 @@ State requirements:
 - Homepage and products cards need wishlist state, but wishlist writes require both `product_id` and `variant_id`; the recommended implementation path is to resolve a deterministic default variant from product detail or variant-list data before enabling wishlist writes, while treating a product-level wishlist endpoint as a future backend enhancement rather than a frontend dependency.
 - The backend contains review list logic but does not currently register a public GET reviews route in the router, so rendering review lists on product detail is blocked until that route is exposed.
 - Logged-in cart deletion is item-ID based, while the current frontend cart store keys by product ID; the frontend cart model must change before API integration.
+
+
+The following adjustments and validations should be performed:
+
+1. Review listing endpoint validation
+
+A public route has been added:
+
+`GET /api/v1/catalog/products/:id/reviews?limit=20&offset=0`
